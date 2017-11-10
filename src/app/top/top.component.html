@@ -1,0 +1,42 @@
+<mat-toolbar>
+  <table>
+    <tr>
+      <td>
+        <table>
+          <tr>
+            <td class="caption">{{ clock | async | date:'EEEE, MMMM d, y, h:mm a' }}</td>
+          </tr>
+          <tr>
+            <td>
+              <span class="sub-caption">Last Update: {{ timeStamp | async | date: 'shortTime' }}</span>
+              <button mat-icon-button (click)="refresh()" [disabled]="(status | async) !== 'STATUS_READY'" >
+                <mat-icon md-18>refresh</mat-icon>
+              </button>
+            </td>
+          </tr>
+        </table>
+      </td>
+      <td>
+        <h3>Scheduler</h3>
+      </td>
+      <td class="right-adjust">
+        <button mat-raised-button class="menu-button" [matMenuTriggerFor]="logout">
+          <table>
+            <tr>
+              <td class="caption">{{ username | async }}</td>
+            </tr>
+            <tr>
+              <td class="sub-caption">[{{ environment | async }}]</td>
+            </tr>
+          </table>
+        </button>
+        <mat-menu #logout="matMenu" [overlapTrigger]="false">
+          <button mat-menu-item (click)="signout()">
+            <mat-icon style="color:red">clear</mat-icon>
+            Sign Out
+          </button>
+        </mat-menu>
+      </td>
+    </tr>
+  </table>
+</mat-toolbar>

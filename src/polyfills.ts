@@ -13,6 +13,7 @@
  *
  * Learn more in https://angular.io/docs/ts/latest/guide/browser-support.html
  */
+import 'qtip2/dist/jquery.qtip.min.js';
 
 /***************************************************************************************************
  * BROWSER POLYFILLS

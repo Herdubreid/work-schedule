@@ -1,0 +1,45 @@
+import { Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material';
+import { Observable } from 'rxjs/Observable';
+import { Store } from '@ngrx/store';
+import { SignonService, IServiceCallback } from 'e1-service';
+
+import { SignonPromptComponent } from './signon-prompt.component';
+
+export interface IServiceCall {
+    call(callback: IServiceCallback);
+}
+
+@Injectable()
+export class E1HelperService {
+    promptSignon(service: IServiceCall, callback: IServiceCallback = {}) {
+        this.dlg.open(SignonPromptComponent, {
+            disableClose: true,
+            width: '250px'
+        });
+    }
+    autoSignon(service: IServiceCall, callback: IServiceCallback = {}) {
+        if (this.signon.inCall) {
+            return;
+        }
+        this.signon.authenticate({
+            error: () => { this.promptSignon(service, callback); }
+        });
+    }
+    call(service: IServiceCall, callback: IServiceCallback = {}, cancel = {}) {
+        const cb = Object.assign({}, callback, {
+            error: msg => { this.autoSignon(service, callback); }
+        });
+        if (this.signon.hasToken) {
+            service.call(cb);
+        } else {
+            this.promptSignon(service, callback);
+        }
+    }
+    constructor(
+        public dlg: MatDialog,
+        public store: Store<any>,
+        public signon: SignonService,
+    ) {
+    }
+}

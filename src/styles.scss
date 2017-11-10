@@ -1,0 +1,38 @@
+/* Fonts and Icons */
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500|Material+Icons');
+@import url('https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css');
+
+/* Fonts and Icons */
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500|Material+Icons');
+@import url('https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css');
+
+/* Material Style */
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+
+/* Fullcalendar Style */
+@import '~fullcalendar/dist/fullcalendar.css';
+.fc-basic-view .fc-body .fc-row {
+    min-height: 2em !important;
+}
+.fc-toolbar {
+    margin-bottom: 2px !important;
+    margin-top: 2px !important;
+}
+.fc-header-title h2 {
+    font-size: .9em;
+    white-space: normal !important;
+}
+/* qtip2 Style */
+@import '~qtip2/dist/jquery.qtip.css';
+/* jstree Stype */
+@import '~jstree/dist/themes/default/style.min.css';
+.no_checkbox > i.jstree-checkbox {
+    display: none !important;
+}
+
+/* Global Styles */
+.fill-remaining-space {
+    // This fills the remaining space, by using flexbox. 
+    // Every toolbar row uses a flexbox row layout.
+    flex: 1 1 auto;
+}

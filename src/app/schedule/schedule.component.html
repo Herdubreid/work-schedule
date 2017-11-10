@@ -1,0 +1,21 @@
+<mat-card>
+  <mat-card-title>Schedules</mat-card-title>
+  <mat-card-content>
+    <app-tree></app-tree>
+  </mat-card-content>
+</mat-card>
+<mat-card>
+  <mat-card-title>{{ title | async }}</mat-card-title>
+  <mat-card-content>
+    <app-calendar [display]="calendar" [start]="first" header="true"></app-calendar>
+    <app-calendar [display]="calendar" [start]="second"></app-calendar>
+    <app-calendar [display]="calendar" [start]="third" footer="true"></app-calendar>
+  </mat-card-content>
+</mat-card>
+<mat-card>
+  <mat-card-title>Roster</mat-card-title>
+  <mat-card-subtitle>{{ start | async | date: 'EEEE, MMMM d' }}</mat-card-subtitle>
+  <mat-card-content>
+    <app-roster></app-roster>
+  </mat-card-content>
+</mat-card>
