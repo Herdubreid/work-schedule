@@ -5,7 +5,7 @@ import { map, reduce, withLatestFrom } from 'rxjs/operators';
 import * as $ from 'jquery';
 import 'jstree';
 
-import { IState, IMCU, IUDC, ISchedule, IEmployee } from '../store/state';
+import { IState, IMCU, ISchedule, IEmployee } from '../store/state';
 import { AppActions } from '../store/actions';
 import '../helpers/utils';
 
@@ -36,7 +36,6 @@ export class TreeComponent implements OnInit {
             .withLatestFrom(this.store)
             .subscribe(([employees, store]) => {
                 if (employees.length) {
-                    const udc = store.app.udcs.filter(r => r.sy === '06' && r.rt === '13');
                     const data = employees.reduce<ITreeNode[]>((data, r) => {
                         const hmco = data.find(e => e.data.hmco.localeCompare(r.hmco) === 0) ||
                             data[data.push({
@@ -47,14 +46,15 @@ export class TreeComponent implements OnInit {
                             }) - 1];
                         const hmcu = hmco.children.find(e => e.data.hmcu.localeCompare(r.hmcu) === 0) ||
                             hmco.children[hmco.children.push({
-                                text: `${r.hmcu} - ${store.app.mcus.find(m => m.mcu.localeCompare(r.hmcu) === 0) ? store.app.mcus.find(m => m.mcu.localeCompare(r.hmcu) === 0).title : 'n/a'}`,
+                                text: `${r.hmcu} - ${store.app.mcus.find(m => m.mcu.localeCompare(r.hmcu) === 0)
+                                    ? store.app.mcus.find(m => m.mcu.localeCompare(r.hmcu) === 0).title : 'n/a'}`,
                                 data: { hmco: r.hmco, hmcu: r.hmcu },
                                 children: []
                             }) - 1];
-                        const crew = hmcu.children.find(e => e.data.udc.localeCompare(r.p013) === 0) ||
+                        const crew = hmcu.children.find(e => e.data.shft.localeCompare(r.shft) === 0) ||
                             hmcu.children[hmcu.children.push({
-                                text: `${r.p013} - ${udc.find(c => c.code === r.p013) ? udc.find(c => c.code === r.p013).title : 'n/a'}`,
-                                data: { hmco: r.hmco, hmcu: hmcu.data.hmcu, udc: r.p013 },
+                                text: `${r.shft} - ${r.shftT}`,
+                                data: { hmco: r.hmco, hmcu: hmcu.data.hmcu, shft: r.shft },
                                 children: []
                             }) - 1];
                         crew.children.push({ text: `${r.alph} (${r.an8})`, data: { an8: r.an8 } });
@@ -73,18 +73,18 @@ export class TreeComponent implements OnInit {
                     $(this.host.nativeElement).on('select_node.jstree', (e, data) => {
                         if (data.node.data.hmco) {
                             let mcu: string[];
-                            let udc: string[];
+                            let shft: string[];
                             if (data.node.data.hmcu) {
                                 mcu = [data.node.data.hmcu];
-                                if (data.node.data.udc) {
-                                    udc = data.node.data.udc;
+                                if (data.node.data.shft) {
+                                    shft = [data.node.data.shft];
                                 } else {
-                                    udc = data.node.children
-                                        .map(n => $(this.host.nativeElement).jstree(true).get_node(n).data.udc);
+                                    shft = data.node.children
+                                        .map(n => $(this.host.nativeElement).jstree(true).get_node(n).data.shft);
                                 }
                                 this.store.dispatch(new AppActions.SelectRosterAction(
                                     data.node.text,
-                                    store.app.schedules.filter(r => mcu.includes(r.mcu) && udc.includes(r.ac23))
+                                    store.app.schedules.filter(r => mcu.includes(r.mcu) && shft.includes(r.ac23))
                                         .map(r => r.an8)
                                 ));
                             } else {

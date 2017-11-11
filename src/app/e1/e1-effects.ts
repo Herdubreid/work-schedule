@@ -22,6 +22,7 @@ import { V01311ARequest, IV01311AResponse, IV01311ARow, V01311A } from './v01311
 import { F0101Request, IF0101Response, F0101 } from './f0101';
 import { F0006Request, IF0006Response, F0006 } from './f0006';
 import { F060116Request, IF060116Response, F060116 } from './f060116';
+import { WWEmployeesRequest, IWWEmployeesResponse, W060116F } from './ww-employees';
 import { EmployeeScheduleRequest, IEmployeeScheduleForm, W597311A } from './employee-schedule';
 
 /**
@@ -57,8 +58,6 @@ export class E1EffectsService {
     @Effect({ dispatch: false })
     refresh$ = this.actions$.ofType<AppActions.RefreshAction>(ActionTypes.REFRESH)
         .do(() => {
-            this.form.request = new UDCRequest('06', '13');
-            this.e1.call(this.form);
             this.form.request = new UDCRequest('01', 'AD');
             this.e1.call(this.form);
             this.db.request = new V01311ARequest();
@@ -67,6 +66,7 @@ export class E1EffectsService {
     @Effect()
     udcResponse$ = this.actions$.ofType<E1Actions.FormResponseAction>(E1ActionTypes.FORM_RESPONSE)
         .map(action => action.payload.formResponse)
+        .filter(form => form[UDC])
         .switchMap((form: IUDCResponse) => {
             return Observable.of(new AppActions.UDCsAction(
                 form.fs_P0004A_W0004AA.data.txtProductCode_16.value,
@@ -114,8 +114,10 @@ export class E1EffectsService {
                 .map(r => r.F0101_MCU.value))];
             this.db.request = new F0006Request(mcus);
             this.e1.call(this.db);
-            this.db.request = new F060116Request(mcus);
-            this.e1.call(this.db);
+            //this.db.request = new F060116Request(mcus);
+            //this.e1.call(this.db);
+            this.form.request = new WWEmployeesRequest(mcus);
+            this.e1.call(this.form);
             return Observable.of(new AppActions.SchedulesAction(f0101.fs_DATABROWSE_F0101.data.gridData.rowset
                 .map<ISchedule>(r => {
                     return {
@@ -142,33 +144,37 @@ export class E1EffectsService {
             ));
         });
     @Effect()
-    v060116Response$ = this.actions$.ofType<E1Actions.DatabrowserResponseAction>(E1ActionTypes.DATABROWSER_RESPONSE)
-        .map(actions => actions.payload.databrowserResponse)
-        .filter(db => db[F060116])
-        .switchMap((f060116: IF060116Response) => {
+    wwEmployeesResponse$ = this.actions$.ofType<E1Actions.FormResponseAction>(E1ActionTypes.FORM_RESPONSE)
+        .map(actions => actions.payload.formResponse)
+        .filter(form => form[W060116F])
+        .switchMap((form: IWWEmployeesResponse) => {
             const start = new Date();
             start.setDate(1);
             const end = start.addMonths(3);
             const request = new BatchformRequest();
-            request.formRequests = f060116.fs_DATABROWSE_F060116.data.gridData.rowset
+            request.formRequests = form.fs_P060116_W060116F.data.gridData.rowset
                 .map(r => {
-                    return new EmployeeScheduleRequest(r.F060116_AN8.value, start, end);
+                    return new EmployeeScheduleRequest(r.mnAddressNumber_29.value, start, end);
                 });
             this.batch.request = request;
             this.e1.call(this.batch);
             return Observable.of(new AppActions.EmployeesAction(
-                f060116.fs_DATABROWSE_F060116.data.gridData.rowset
+                form.fs_P060116_W060116F.data.gridData.rowset
                     .map<IEmployee>(r => {
                         return {
-                            hmco: r.F060116_HMCO.value,
-                            hmcu: r.F060116_HMCU.value.trim(),
-                            p013: r.F060116_P013.value,
-                            an8: r.F060116_AN8.value,
-                            alph: r.F060116_ALPH.value
+                            hmco: r.sCo_35.value,
+                            hmcu: r.sHomeBusinessUnit_36.value.trim(),
+                            shft: r.chSh_47.value,
+                            shftT: r.sShiftcode_89.value,
+                            jbcd: r.sJobTyp_42.value,
+                            jbst: r.sJobStep_43.value,
+                            job: r.sEEOJob_88.value,
+                            an8: r.mnAddressNumber_29.value,
+                            alph: r.sAlphaName_30.value
                         };
                     })
             ));
-        });
+        })
     @Effect()
     employeeSchedule$ = this.actions$.ofType<E1Actions.BatchformResponseAction>(E1ActionTypes.BATCHFORM_RESPONSE)
         .map(action => action.payload.batchformResponse)

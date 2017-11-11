@@ -1,13 +1,20 @@
 table {
     width: 100%;
-    line-height: 16px;
 }
-.right-adjust {
+td {
+    width: 33%;
+}
+.compressed {
+    line-height: 20px;
+    bottom: 0px;
+}
+.center {
+    text-align: center;
+}
+.right {
     text-align: right;
 }
 .mat-toolbar {
-    font-size: 16px;
-    font-weight: normal;
     min-height: 70px;
 }
 .menu-button {
@@ -20,5 +27,4 @@ table {
 }
 .sub-caption {
     font-size: 10px;
-    margin-top: -2px;
 }

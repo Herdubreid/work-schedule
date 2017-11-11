@@ -1,5 +1,9 @@
 <div [hidden]="(status | async) === 'STATUS_OFF'">
-    <app-top></app-top>
-    <mat-progress-bar value="100" [mode]="(status | async) === 'STATUS_BUSY' ? 'indeterminate' :'determinate'"></mat-progress-bar>
-    <app-schedule></app-schedule>
+    <div class="heading">
+        <app-top></app-top>
+        <mat-progress-bar value="100" [mode]="(status | async) === 'STATUS_BUSY' ? 'indeterminate' :'determinate'"></mat-progress-bar>
+    </div>
+    <div class="content">
+        <app-schedule></app-schedule>
+    </div>
 </div>

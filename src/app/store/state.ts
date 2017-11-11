@@ -17,7 +17,11 @@ export interface IRoster {
 export interface IEmployee {
     hmco: string;
     hmcu: string;
-    p013: string;
+    shft: string;
+    shftT: string;
+    jbcd: string;
+    jbst: string;
+    job: string;
     an8: string;
     alph: string;
 }

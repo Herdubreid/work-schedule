@@ -14,17 +14,17 @@ import '../helpers/utils';
 <div *ngIf="dayshift.length > 0">
   <h4>Dayshift:</h4>
   <div *ngFor="let e of dayshift">
-    <button mat-button (click)="search(e)">{{ e.alph }} ({{ e.an8 }})</button>
+    <button mat-button (click)="search(e)">{{ e.alph }} - {{ e.job }} ({{ e.an8 }})</button>
   </div>
 <div *ngIf="nightshift.length > 0">
   <h4>Nightshift:</h4>
   <div *ngFor="let e of nightshift">
-    <button mat-button (click)="search(e)">{{ e.alph }} ({{ e.an8 }})</button>
+    <button mat-button (click)="search(e)">{{ e.alph }} - {{ e.job }} ({{ e.an8 }})</button>
   </div>
 <div *ngIf="leave.length > 0">
   <h4>Leave:</h4>
   <div *ngFor="let e of leave">
-    <button mat-button (click)="search(e)">{{ e.alph }} ({{ e.an8 }})</button>
+    <button mat-button (click)="search(e)">{{ e.alph }} - {{ e.job }} ({{ e.an8 }})</button>
   </div>
 </div>
 `,

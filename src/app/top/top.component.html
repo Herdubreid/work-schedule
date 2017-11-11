@@ -3,23 +3,23 @@
     <tr>
       <td>
         <table>
-          <tr>
-            <td class="caption">{{ clock | async | date:'EEEE, MMMM d, y, h:mm a' }}</td>
-          </tr>
-          <tr>
+          <tr class="compressed">
             <td>
-              <span class="sub-caption">Last Update: {{ timeStamp | async | date: 'shortTime' }}</span>
-              <button mat-icon-button (click)="refresh()" [disabled]="(status | async) !== 'STATUS_READY'" >
-                <mat-icon md-18>refresh</mat-icon>
+              <div class="caption">{{ clock | async | date:'EEEE, MMMM d, y, h:mm a' }}</div>
+              <div class="sub-caption">Last Update: {{ timeStamp | async | date: 'shortTime' }}</div>
+            </td>
+            <td>
+              <button mat-icon-button (click)="refresh()" [disabled]="(status | async) !== 'STATUS_READY'">
+                <mat-icon>refresh</mat-icon>
               </button>
             </td>
           </tr>
         </table>
       </td>
-      <td>
-        <h3>Scheduler</h3>
+      <td class="center">
+        <h1>Work Schedule</h1>
       </td>
-      <td class="right-adjust">
+      <td class="right">
         <button mat-raised-button class="menu-button" [matMenuTriggerFor]="logout">
           <table>
             <tr>
