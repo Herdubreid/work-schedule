@@ -3,21 +3,21 @@
       "mode": "DEMO",
       "udcs": [
         {
-          sy: "01",
-          rt: "AD",
-          code: "",
+          "sy": "01",
+          "rt": "AD",
+          "code": "",
           "title": "."
         },
         {
-          sy: "01",
-          rt: "AD",
-          code: "D",
+          "sy": "01",
+          "rt": "AD",
+          "code": "D",
           "title": "Day Shift"
         },
         {
-          sy: "01",
-          rt: "AD",
-          code: "N",
+          "sy": "01",
+          "rt": "AD",
+          "code": "N",
           "title": "Night Shift"
         }
       ],
