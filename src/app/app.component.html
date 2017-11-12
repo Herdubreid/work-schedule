@@ -1,4 +1,4 @@
-<div [hidden]="(status | async) === 'STATUS_OFF'">
+<div [hidden]="(status | async) === 'STATUS_OFF' && (mode | async) !== 'DEMO'">
     <div class="heading">
         <app-top></app-top>
         <mat-progress-bar value="100" [mode]="(status | async) === 'STATUS_BUSY' ? 'indeterminate' :'determinate'"></mat-progress-bar>

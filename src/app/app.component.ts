@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { SignonService, StatusTypes } from 'e1-service';
+import * as Moment from 'moment';
 
 import { IState } from './store/state';
 import { AppActions } from './store/actions';
@@ -18,6 +19,7 @@ declare var AIS_BASE_URL;
 })
 export class AppComponent {
   status: Observable<string>;
+  mode: Observable<string>;
   constructor(
     http: Http,
     dlg: MatDialog,
@@ -26,6 +28,7 @@ export class AppComponent {
   ) {
     signon.baseUrl = AIS_BASE_URL;
     this.status = store.select<string>(s => s.e1.status);
+    this.mode = store.select<string>(s => s.app.mode);
     this.status
       .subscribe(status => {
         if (status === StatusTypes.STATUS_OFF) {
@@ -34,6 +37,8 @@ export class AppComponent {
               .map(response => response.json())
               .subscribe(app => {
                 store.dispatch(new AppActions.LoadDemoAction(app));
+                const d = Moment('2017-11-13', 'YYYY-MM-DD');
+                store.dispatch(new AppActions.StartEndAction(d, d));
               });
           } else {
             dlg.open(SignonPromptComponent, {
