@@ -10,9 +10,7 @@ import { AppActions, ActionTypes } from './actions';
 export function appReducer(state = initialAppState, action: AppActions.AllActions): IAppState {
     switch (action.type) {
         case ActionTypes.LOAD_DEMO:
-            return Object.assign({}, state, {
-                app: action.appState
-            });
+            return action.appState;
         case ActionTypes.UDCS:
             const udcs = state.udcs.filter(r => action.sy !== r.sy && action.rt !== r.rt);
             return Object.assign({}, state, {
