@@ -87,8 +87,10 @@ export class E1EffectsService {
         .map(action => action.payload.databrowserResponse)
         .filter(db => db[V01311A])
         .switchMap((v01311a: IV01311AResponse) => {
-            this.db.request = new F0101Request([...new Set(v01311a.fs_DATABROWSE_V01311A.data.gridData.rowset
-                .map(r => r.F01301D_IDAN8.value))]);
+            const an8s = v01311a.fs_DATABROWSE_V01311A.data.gridData.rowset
+                .map(r => r.F01301D_IDAN8.value)
+                .filter((r, pos, ar) => ar.indexOf(r) === pos);
+            this.db.request = new F0101Request(an8s);
             this.e1.call(this.db);
             return Observable.of(new AppActions.ScheduledRostersAction(
                 v01311a.fs_DATABROWSE_V01311A.data.gridData.rowset
@@ -110,8 +112,9 @@ export class E1EffectsService {
         .map(action => action.payload.databrowserResponse)
         .filter(db => db[F0101])
         .switchMap((f0101: IF0101Response) => {
-            const mcus = [...new Set(f0101.fs_DATABROWSE_F0101.data.gridData.rowset
-                .map(r => r.F0101_MCU.value))];
+            const mcus = f0101.fs_DATABROWSE_F0101.data.gridData.rowset
+                .map(r => r.F0101_MCU.value)
+                .filter((r, pos, ar) => ar.indexOf(r) === pos);
             this.db.request = new F0006Request(mcus);
             this.e1.call(this.db);
             //this.db.request = new F060116Request(mcus);
