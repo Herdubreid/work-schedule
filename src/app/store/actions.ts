@@ -1,13 +1,14 @@
 import { Action } from '@ngrx/store';
 import * as Moment from 'moment';
 
-import { IUDC, IMCU, ISchedule, IRoster, IEmployee } from './state';
+import { IAppState, IUDC, IMCU, ISchedule, IRoster, IEmployee } from './state';
 
 /**
  * Application Actions
  */
 
 export enum ActionTypes {
+    LOAD_DEMO = 'LOAD_DEMO',
     UDCS = 'UDCS',
     MCUS = 'MCUS',
     SCHEDULES = 'SCHEDULES',
@@ -22,6 +23,10 @@ export enum ActionTypes {
 }
 
 export namespace AppActions {
+    export class LoadDemoAction implements Action {
+        readonly type = ActionTypes.LOAD_DEMO;
+        constructor(public appState: IAppState) { }
+    }
     export class UDCsAction implements Action {
         readonly type = ActionTypes.UDCS;
         constructor(public sy: string, public rt: string, public udcs: IUDC[]) { }
@@ -65,6 +70,7 @@ export namespace AppActions {
         readonly type = ActionTypes.RESET;
     }
     export type AllActions =
+        LoadDemoAction |
         UDCsAction |
         MCUsAction |
         SchedulesAction |

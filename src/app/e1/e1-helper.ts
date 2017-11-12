@@ -12,6 +12,7 @@ export interface IServiceCall {
 
 @Injectable()
 export class E1HelperService {
+    retry = 0;
     promptSignon(service: IServiceCall, callback: IServiceCallback = {}) {
         this.dlg.open(SignonPromptComponent, {
             disableClose: true,
@@ -23,6 +24,7 @@ export class E1HelperService {
             return;
         }
         this.signon.authenticate({
+            success: () => { this.retry = 0; },
             error: () => { this.promptSignon(service, callback); }
         });
     }
@@ -30,7 +32,7 @@ export class E1HelperService {
         const cb = Object.assign({}, callback, {
             error: msg => { this.autoSignon(service, callback); }
         });
-        if (this.signon.hasToken) {
+        if (this.signon.hasToken && this.retry < 3) {
             service.call(cb);
         } else {
             this.promptSignon(service, callback);

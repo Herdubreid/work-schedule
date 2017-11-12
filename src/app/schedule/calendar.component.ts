@@ -12,10 +12,10 @@ import '../helpers/utils';
 
 interface IActivity {
     cd1: string;
-    activity: string;
     title: string;
 }
 interface IEvent extends FC.EventObject {
+    type: string;
     activities: IActivity[];
 }
 export interface ICalendar {
@@ -61,16 +61,14 @@ export class CalendarComponent implements OnInit {
             },
             eventRender: (event: IEvent, element: any, view) => {
                 element.css('font-size', '.6em');
-                const regular = event.activities.filter(e => e.activity.localeCompare('REGULAR') === 0);
-                const holiday = event.activities.filter(e => e.activity.localeCompare('HOLIDAY') === 0);
-                if (regular.length > 0) {
-                    const d = regular.filter(e => e.cd1 === 'D').length;
-                    const n = regular.filter(e => e.cd1 === 'N').length;
-                    element.html(`<div>${d > 0 ? 'D'+d : ''} ${n > 0 ? 'N'+n : ''}</div>`);
+                if (event.type.localeCompare('REGULAR') === 0) {
+                    const d = event.activities.filter(e => e.cd1 === 'D').length;
+                    const n = event.activities.filter(e => e.cd1 === 'N').length;
+                    element.html(`<div>${d > 0 ? 'D' + d : ''} ${n > 0 ? 'N' + n : ''}</div>`);
                 }
-                if (holiday.length > 0) {
+                if (event.type.localeCompare('HOLIDAY') === 0) {
                     element.css('background-color', 'green');
-                    element.html(`<div>Leave (${holiday.length})</div>`);
+                    element.html(`<div>${event.activities.length > 1 ? 'Holday...' : event.activities[0].title}</div>`);
                 }
                 element.qtip({
                     content: event.activities.map(e => `<div>${e.title}</div>`).sort()
@@ -88,11 +86,10 @@ export class CalendarComponent implements OnInit {
                 const events = display.rosters
                     .filter(r => display.selection.includes(r.an8))
                     .reduce<IEvent[]>((events, r) => {
-                        const node = events.find(e => r.start.diff(e.start) === 0) ||
-                            events[events.push({ start: r.start, title: 'Events', activities: [] }) - 1];
+                        const node = events.find(e => (r.start.diff(e.start) === 0 && r.activity.localeCompare(e.type)) === 0) ||
+                            events[events.push({ start: r.start, title: 'Events', type: r.activity, activities: [] }) - 1];
                         node.activities.push({
                             cd1: r.cd1,
-                            activity: r.activity,
                             title: r.title
                         });
                         return events;

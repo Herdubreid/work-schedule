@@ -43,6 +43,7 @@ export interface IMCU {
     title: string;
 }
 export interface IAppState {
+    mode: string;
     udcs: IUDC[];
     mcus: IMCU[];
     schedules: ISchedule[];
@@ -59,6 +60,7 @@ export interface IState {
     e1: IServerState;
 }
 export const initialAppState = {
+    mode: 'NORMAL',
     udcs: [],
     mcus: [],
     schedules: [],
