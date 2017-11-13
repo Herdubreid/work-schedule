@@ -22,7 +22,7 @@ export interface IWWEmployeesFormData extends IFormData<IWWEmployeesRow> {
 export type IWWEmployeesForm = IForm<IWWEmployeesFormData>;
 
 export interface IWWEmployeesResponse extends IFormResponse {
-    fs_P060116_W060116F: IWWEmployeesForm
+    fs_P060116_W060116F: IWWEmployeesForm;
 }
 
 export class WWEmployeesRequest extends FormRequest {
@@ -32,13 +32,12 @@ export class WWEmployeesRequest extends FormRequest {
         this.version = 'ZJDE0001';
         this.formServiceAction = 'R';
         this.maxPageSize = '10000';
-        this.aliasNaming = false;
         this.returnControlIDs = '1[29,30,35,36,42,43,47,53,57,88,89]';
-        let value = hmcus.map(e => {
+        const value = hmcus.map(e => {
             return {
                 content: e,
                 specialValueId: 'LITERAL'
-            }
+            };
         });
         this.query = {
             condition: [
@@ -51,6 +50,6 @@ export class WWEmployeesRequest extends FormRequest {
             autoFind: true,
             matchType: 'MATCH_ALL',
             autoClear: true
-        }
+        };
     }
 }

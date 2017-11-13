@@ -20,7 +20,7 @@ interface IEvent extends FC.EventObject {
 }
 export interface ICalendar {
     selection: string[];
-    rosters: IRoster[]
+    rosters: IRoster[];
 }
 
 @Component({

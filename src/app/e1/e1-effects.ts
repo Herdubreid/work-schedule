@@ -21,7 +21,6 @@ import { UDCRequest, UDC, IUDCResponse } from './udc';
 import { V01311ARequest, IV01311AResponse, IV01311ARow, V01311A } from './v01311a';
 import { F0101Request, IF0101Response, F0101 } from './f0101';
 import { F0006Request, IF0006Response, F0006 } from './f0006';
-import { F060116Request, IF060116Response, F060116 } from './f060116';
 import { WWEmployeesRequest, IWWEmployeesResponse, W060116F } from './ww-employees';
 import { EmployeeScheduleRequest, IEmployeeScheduleForm, W597311A } from './employee-schedule';
 
@@ -117,8 +116,6 @@ export class E1EffectsService {
                 .filter((r, pos, ar) => ar.indexOf(r) === pos);
             this.db.request = new F0006Request(mcus);
             this.e1.call(this.db);
-            //this.db.request = new F060116Request(mcus);
-            //this.e1.call(this.db);
             this.form.request = new WWEmployeesRequest(mcus);
             this.e1.call(this.form);
             return Observable.of(new AppActions.SchedulesAction(f0101.fs_DATABROWSE_F0101.data.gridData.rowset
@@ -177,7 +174,7 @@ export class E1EffectsService {
                         };
                     })
             ));
-        })
+        });
     @Effect()
     employeeSchedule$ = this.actions$.ofType<E1Actions.BatchformResponseAction>(E1ActionTypes.BATCHFORM_RESPONSE)
         .map(action => action.payload.batchformResponse)
