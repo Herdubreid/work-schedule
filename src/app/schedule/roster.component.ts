@@ -59,8 +59,7 @@ export class RosterComponent implements OnInit {
         this.leave = store.app.employees
           .filter(e => this.roster
             .filter(r => e.an8.localeCompare(r.an8) === 0)
-            .filter(r => r.activity.localeCompare('HOLIDAY') === 0)
-            .filter(r => r.start.diff(start, 'days') === 0).length > 0)
+            .filter(r => r.activity.localeCompare('HOLIDAY') === 0).length > 0)
           .sort((a, b) => a.alph.localeCompare(b.alph));
       });
   }
