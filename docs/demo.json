@@ -1,5 +1,6 @@
 {
       "mode": "DEMO",
+      "status": "READY",
       "udcs": [
         {
           "sy": "01",

@@ -114,10 +114,10 @@ export class E1EffectsService {
             const mcus = f0101.fs_DATABROWSE_F0101.data.gridData.rowset
                 .map(r => r.F0101_MCU.value)
                 .filter((r, pos, ar) => ar.indexOf(r) === pos);
-            this.db.request = new F0006Request(mcus);
+            const request = new F0006Request();
+            request.queryRMCU1(mcus);
+            this.db.request = request;
             this.e1.call(this.db);
-            this.form.request = new WWEmployeesRequest(mcus);
-            this.e1.call(this.form);
             return Observable.of(new AppActions.SchedulesAction(f0101.fs_DATABROWSE_F0101.data.gridData.rowset
                 .map<ISchedule>(r => {
                     return {
@@ -133,6 +133,11 @@ export class E1EffectsService {
         .map(actions => actions.payload.databrowserResponse)
         .filter(db => db[F0006])
         .switchMap((f0006: IF0006Response) => {
+            const mcus = f0006.fs_DATABROWSE_F0006.data.gridData.rowset
+                .map(r => r.F0006_MCU.value)
+                .filter((r, pos, ar) => ar.indexOf(r) === pos);
+            this.form.request = new WWEmployeesRequest(mcus);
+            this.e1.call(this.form);
             return Observable.of(new AppActions.MCUsAction(f0006.fs_DATABROWSE_F0006.data.gridData.rowset
                 .map<IMCU>(r => {
                     return {
@@ -148,47 +153,53 @@ export class E1EffectsService {
         .map(actions => actions.payload.formResponse)
         .filter(form => form[W060116F])
         .switchMap((form: IWWEmployeesResponse) => {
-            const start = new Date();
-            start.setDate(1);
-            const end = start.addMonths(3);
-            const request = new BatchformRequest();
-            request.formRequests = form.fs_P060116_W060116F.data.gridData.rowset
-                .map(r => {
-                    return new EmployeeScheduleRequest(r.mnAddressNumber_29.value, start, end);
-                });
-            this.batch.request = request;
-            this.e1.call(this.batch);
-            return Observable.of(new AppActions.EmployeesAction(
-                form.fs_P060116_W060116F.data.gridData.rowset
-                    .map<IEmployee>(r => {
-                        return {
-                            hmco: r.sCo_35.value,
-                            hmcu: r.sHomeBusinessUnit_36.value.trim(),
-                            shft: r.chSh_47.value,
-                            shftT: r.sShiftcode_89.value,
-                            jbcd: r.sJobTyp_42.value,
-                            jbst: r.sJobStep_43.value,
-                            job: r.sEEOJob_88.value,
-                            an8: r.mnAddressNumber_29.value,
-                            alph: r.sAlphaName_30.value
-                        };
-                    })
-            ));
+            if (form.fs_P060116_W060116F.data.gridData.summary.records > 0) {
+
+                const start = new Date();
+                start.setDate(1);
+                const end = start.addMonths(3);
+                const request = new BatchformRequest();
+                request.formRequests = form.fs_P060116_W060116F.data.gridData.rowset
+                    .map(r => {
+                        return new EmployeeScheduleRequest(r.mnAddressNumber_29.value, start, end);
+                    });
+                this.batch.request = request;
+                this.e1.call(this.batch);
+                return Observable.of(new AppActions.EmployeesAction(
+                    form.fs_P060116_W060116F.data.gridData.rowset
+                        .map<IEmployee>(r => {
+                            return {
+                                hmco: r.sCo_35.value,
+                                hmcu: r.sHomeBusinessUnit_36.value.trim(),
+                                shft: r.chSh_47.value,
+                                shftT: r.sShiftcode_89.value,
+                                jbcd: r.sJobTyp_42.value,
+                                jbst: r.sJobStep_43.value,
+                                job: r.sEEOJob_88.value,
+                                an8: r.mnAddressNumber_29.value,
+                                alph: r.sAlphaName_30.value
+                            };
+                        })
+                ));
+            }
+            return Observable.empty();
         });
     @Effect()
     employeeSchedule$ = this.actions$.ofType<E1Actions.BatchformResponseAction>(E1ActionTypes.BATCHFORM_RESPONSE)
         .map(action => action.payload.batchformResponse)
-        .switchMap(bf => {
+        .withLatestFrom(this.store)
+        .switchMap(([bf, store]) => {
             const roster: IRoster[] = [];
             for (let i = 0; bf[W597311A.format(i)]; i++) {
                 const form: IEmployeeScheduleForm = bf[W597311A.format(i)];
                 roster.push(...form.data.gridData.rowset
                     .map<IRoster>(r => {
+                        const e = store.app.employees.find(e => e.an8 === r.mnAddressNumber_21.value);
                         return {
                             an8: r.mnAddressNumber_21.value,
                             type: r.sCalendarType_24.value,
                             activity: r.sActivityType_20.value,
-                            title: r.sSubject_17.value,
+                            title: e ? e.alph : r.sSubject_17.value,
                             cd1: r.sCategoryCode1_36.value,
                             start: Moment(r.utTimeDateStart_18.value, jdeUTCFormat()),
                             end: Moment(r.utTimeDateEnd_19.value, jdeUTCFormat())

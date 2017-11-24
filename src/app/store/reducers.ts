@@ -34,6 +34,7 @@ export function appReducer(state = initialAppState, action: AppActions.AllAction
             });
         case ActionTypes.EMPLOYEE_ROSTERS:
             return Object.assign({}, state, {
+                status: 'READY',
                 start: Moment(),
                 end: Moment(),
                 rosters: [...state.rosters, ...action.rosters]
@@ -51,6 +52,10 @@ export function appReducer(state = initialAppState, action: AppActions.AllAction
             return Object.assign({}, state, {
                 start: action.start,
                 end: action.end
+            });
+        case ActionTypes.REFRESH:
+            return Object.assign({}, state, {
+                status: 'LOADING'
             });
         case ActionTypes.RESET:
             return initialAppState;

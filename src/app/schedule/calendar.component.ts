@@ -1,7 +1,9 @@
 import { Component, OnInit, Input, ElementRef } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
-import { reduce, map, filter } from 'rxjs/operators';
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/observable/combineLatest';
+import { reduce, map, combineLatest } from 'rxjs/operators';
 import * as $ from 'jquery';
 import * as Moment from 'moment';
 import 'fullcalendar';
@@ -32,6 +34,8 @@ export class CalendarComponent implements OnInit {
     @Input('start') start: Date;
     @Input('header') header: boolean;
     @Input('footer') footer: boolean;
+    @Input('rosters') rosters: Observable<IRoster[]>;
+    @Input('select') select: Observable<string[]>;
     @Input('display') display: Observable<ICalendar>;
     ngOnInit() {
         const header = this.header ? {
@@ -80,11 +84,12 @@ export class CalendarComponent implements OnInit {
                 }
             }
         });
-        this.display
-            .filter(display => display.selection.length > 0)
-            .subscribe(display => {
-                const events = display.rosters
-                    .filter(r => display.selection.includes(r.an8))
+        Observable
+            .combineLatest(this.rosters, this.select)
+            .filter(([rosters, select]) => select.length > 0)
+            .subscribe(([rosters, select]) => {
+                const events = rosters
+                    .filter(r => select.includes(r.an8))
                     .reduce<IEvent[]>((events, r) => {
                         const node = events.find(e => (r.start.diff(e.start) === 0 && r.activity.localeCompare(e.type)) === 0) ||
                             events[events.push({ start: r.start, title: 'Events', type: r.activity, activities: [] }) - 1];

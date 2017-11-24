@@ -6,6 +6,7 @@ export interface IF0006Row extends IRow {
     F0006_MCU: IValue;
     F0006_CO: IValue;
     F0006_DL01: IValue;
+    F0006_RMCU1: IValue;
 }
 
 export type IF0006FormData = IFormData<IF0006Row>;
@@ -17,13 +18,26 @@ export interface IF0006Response extends IFormResponse {
 }
 
 export class F0006Request extends DatabrowserRequest {
-    constructor(mcus: string[]) {
-        super();
-        this.findOnEntry = 'TRUE';
-        this.targetName = 'F0006';
-        this.targetType = 'table';
-        this.dataServiceType = 'browse';
-        this.returnControlIDs = 'MCU|CO|DL01';
+    queryRMCU1(rmcu1s: string[]) {
+        this.query = {
+            condition: [
+                {
+                    value: rmcu1s.map(content => {
+                        return {
+                            content,
+                            specialValueId: 'LITERAL'
+                        };
+                    }),
+                    controlId: 'F0006.RMCU1',
+                    operator: 'LIST'
+                }
+            ],
+            autoFind: true,
+            matchType: 'MATCH_ALL',
+            autoClear: false
+        };
+    }
+    queryMCU(mcus: string[]) {
         this.query = {
             condition: [
                 {
@@ -41,5 +55,13 @@ export class F0006Request extends DatabrowserRequest {
             matchType: 'MATCH_ALL',
             autoClear: false
         };
+    }
+    constructor() {
+        super();
+        this.findOnEntry = 'TRUE';
+        this.targetName = 'F0006';
+        this.targetType = 'table';
+        this.dataServiceType = 'browse';
+        this.returnControlIDs = 'MCU|CO|DL01|RMCU1';
     }
 }
