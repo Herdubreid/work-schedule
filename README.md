@@ -9,8 +9,11 @@ Run `git clone https://github.com/Herdubreid/work-schedule.git` and `cd work-sch
 ## Configuration
 
 Open src/index.html and set the `AIS_BASE_URL` to your AIS server address:  
-`AIS_BASE_URL = https://server:port/`.  
-Use server address `DEMO` for demo mode. 
+`AIS_BASE_URL = 'https://server:port/';`.  
+Use server address `DEMO` for demo mode.
+Set the default user and password (leave blank if not used):  
+`AIS_DEFAULT_USER = 'demo';`  
+`AIS_DEFAULT_PWD = 'testing';` 
 
 The `Employee Schedule` uses a custom inquiry application `P597311`.  
 Contact Author for more details.
