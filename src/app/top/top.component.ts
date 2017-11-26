@@ -35,7 +35,7 @@ export class TopComponent implements OnInit {
     public store: Store<IState>
   ) {
     this.status = store.select(s => s.e1.status);
-    this.username = store.select(s => s.e1.authResponse ? s.e1.authResponse.username : null);
+    this.username = store.select(s => s.e1.authResponse ? s.e1.authResponse.userInfo.alphaName : null);
     this.environment = store.select(s => s.e1.authResponse ? s.e1.authResponse.environment : null);
     this.timeStamp = store.select<Date>(s => s.e1.databrowserResponse
       ? Moment(s.e1.databrowserResponse.timeStamp, 'YYYY-MM-DD:hh.mm.ss').toDate() : null);

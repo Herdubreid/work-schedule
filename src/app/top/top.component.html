@@ -1,4 +1,4 @@
-<mat-toolbar>
+<mat-toolbar color="primary">
   <table>
     <tr>
       <td>
@@ -20,16 +20,25 @@
         <h1>Work Schedule</h1>
       </td>
       <td class="right">
-        <button mat-raised-button class="menu-button" [matMenuTriggerFor]="logout">
+        <button mat-raised-button color="primary" class="menu-button" [matMenuTriggerFor]="logout">
           <table>
             <tr>
-              <td class="caption">{{ username | async }}</td>
-            </tr>
-            <tr>
-              <td class="sub-caption">[{{ environment | async }}]</td>
+              <td>
+                <table>
+                  <tr>
+                    <td class="caption">{{ username | async }}</td>
+                  </tr>
+                  <tr>
+                    <td class="sub-caption">[{{ environment | async }}]</td>
+                  </tr>
+                </table>
+              </td>
+              <td>
+                <mat-icon class="right">more_vert</mat-icon>
+              </td>
             </tr>
           </table>
-        </button>
+    </button>
         <mat-menu #logout="matMenu" [overlapTrigger]="false">
           <button mat-menu-item (click)="signout()" [disabled]="(status | async) !== 'STATUS_READY'">
             <mat-icon style="color:red">clear</mat-icon>

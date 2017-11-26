@@ -85,6 +85,7 @@ export class TreeComponent implements OnInit {
                     children: schedules
                 },
                 {
+                    id: 'rosters',
                     text: '2 - Rosters',
                     data: {},
                     children: employees
@@ -107,7 +108,7 @@ export class TreeComponent implements OnInit {
                     $(this.host.nativeElement).jstree(true).search(s);
                 });
                 $(this.host.nativeElement).on('loaded.jstree', () => {
-                    //$(this.host.nativeElement).jstree(true).select_node(employees[0].hmco);
+                    $(this.host.nativeElement).jstree(true).select_node('rosters');
                 })
             });
     }
