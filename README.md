@@ -2,6 +2,10 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.4.5.
 
+Based on Mike Bostock's [Collapsible Tree.](https://bl.ocks.org/mbostock/4339083)
+
+[Click for a live Demo](http://oc.celin.io).
+
 ## Clone
 
 Run `git clone https://github.com/Herdubreid/work-schedule.git` and `cd work-schedule` or [Download](https://github.com/Herdubreid/work-schedule/archive/master.zip) a ZIP bundle.
@@ -31,7 +35,5 @@ Run `ng generate component component-name` to generate a new component. You can 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
 
 ## Further help
-
-A [Demo](https://herdubreid.github.io/work-schedule/docs/).
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
