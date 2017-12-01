@@ -2,10 +2,6 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.4.5.
 
-Based on Mike Bostock's [Collapsible Tree.](https://bl.ocks.org/mbostock/4339083)
-
-[Click for a live Demo](http://oc.celin.io).
-
 ## Clone
 
 Run `git clone https://github.com/Herdubreid/work-schedule.git` and `cd work-schedule` or [Download](https://github.com/Herdubreid/work-schedule/archive/master.zip) a ZIP bundle.
