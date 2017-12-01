@@ -2,6 +2,8 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.4.5.
 
+[Run a Demo here](http://ws.celin.io).
+
 ## Clone
 
 Run `git clone https://github.com/Herdubreid/work-schedule.git` and `cd work-schedule` or [Download](https://github.com/Herdubreid/work-schedule/archive/master.zip) a ZIP bundle.
